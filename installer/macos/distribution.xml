@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="2">
+  <title>Vibe Plugin for Premiere Pro</title>
+  <organization>me.vibedownloader</organization>
+  <welcome file="welcome.html" mime-type="text/html"/>
+  <license file="LICENSE" mime-type="text/plain"/>
+  <conclusion file="conclusion.html" mime-type="text/html"/>
+  <background file="background.png" alignment="bottomleft" scaling="none"/>
+  <options customize="never" require-scripts="false" hostArchitectures="arm64,x86_64"/>
+  <domains enable_anywhere="false" enable_currentUserHome="false" enable_localSystem="true"/>
+  <choices-outline>
+    <line choice="default"/>
+  </choices-outline>
+  <choice id="default" title="Vibe Plugin" description="The Premiere Pro panel">
+    <pkg-ref id="me.vibedownloader.vibeplugin"/>
+  </choice>
+  <pkg-ref id="me.vibedownloader.vibeplugin" version="__VERSION__" onConclusion="none">vibe-plugin.pkg</pkg-ref>
+</installer-gui-script>

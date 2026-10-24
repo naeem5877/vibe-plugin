@@ -1,0 +1,12 @@
+#!/bin/bash
+# Runs as root after the files are copied. Turns on unsigned panels for the person who ran the installer.
+USER_NAME="$(stat -f%Su /dev/console 2>/dev/null || true)"
+
+if [ -n "$USER_NAME" ] && [ "$USER_NAME" != "root" ]; then
+  for v in 9 10 11 12; do
+    sudo -u "$USER_NAME" -H defaults write "com.adobe.CSXS.$v" PlayerDebugMode 1 || true
+  done
+  # Make sure the preference is not served from cache the next time Premiere starts.
+  sudo -u "$USER_NAME" -H killall cfprefsd 2>/dev/null || true
+fi
+exit 0

@@ -1,0 +1,23 @@
+<svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 384" width="384" height="384" role="img" aria-labelledby="vibe-stk-title"><title>Vibe</title>
+  <title id="vibe-stk-title">Vibe Stacked Logo</title>
+  <g transform="translate(80, 24) scale(0.875)">
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 218 64 C 225 64 229 73 224 81 L 142 222 C 136 232 120 232 114 222 L 32 81
+      C 27 73 31 64 38 64 L 136 64 C 142 64 146 68 146 74 L 146 112 L 168 112
+      C 174 112 177 119 172 124 L 132 174 C 130 177 126 177 124 174 L 84 124
+      C 79 119 82 112 88 112 L 110 112 L 110 92 C 110 88 106 84 102 84 L 66 84
+      C 60 84 56 90 59 95 L 122 204 C 125 209 131 209 134 204 L 196.35 96
+      C 199 91 195 84 189 84 L 174 84 C 168 84 164 79 164 74 C 164 64 170 64 176 64 Z
+    "/>
+  </g>
+  <g id="wordmark" fill="#000000" fill-rule="evenodd" transform="translate(-16, 120)">
+    <!-- V -->
+    <path d="M 72 160 L 92.7 160 L 110.0 223.4 L 127.3 160 L 148 160 L 120.8 236 L 99.2 236 Z"/>
+    <!-- I -->
+    <path d="M 178 160 H 196 V 236 H 178 Z"/>
+    <!-- B -->
+    <path d="M 226 160 H 262 C 288 160 288 196.5 260 196.5 C 292 196.5 292 236 262 236 H 226 Z M 244 178 H 258 C 270 178 270 189.3 258 189.3 H 244 Z M 244 203.7 H 260 C 272 203.7 272 218 260 218 H 244 Z"/>
+    <!-- E -->
+    <path d="M 312 160 H 366 V 178 H 330 V 189 H 358 V 207 H 330 V 218 H 366 V 236 H 312 Z"/>
+  </g>
+</svg>

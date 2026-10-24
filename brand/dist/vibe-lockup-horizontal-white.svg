@@ -1,0 +1,23 @@
+<svg fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 256" width="768" height="256" role="img" aria-labelledby="vibe-lck-title"><title>Vibe</title>
+  <title id="vibe-lck-title">Vibe Logo Lockup</title>
+  <g transform="translate(24, 0)">
+    <path fill="#ffffff" fill-rule="evenodd" d="
+      M 218 64 C 225 64 229 73 224 81 L 142 222 C 136 232 120 232 114 222 L 32 81
+      C 27 73 31 64 38 64 L 136 64 C 142 64 146 68 146 74 L 146 112 L 168 112
+      C 174 112 177 119 172 124 L 132 174 C 130 177 126 177 124 174 L 84 124
+      C 79 119 82 112 88 112 L 110 112 L 110 92 C 110 88 106 84 102 84 L 66 84
+      C 60 84 56 90 59 95 L 122 204 C 125 209 131 209 134 204 L 196.35 96
+      C 199 91 195 84 189 84 L 174 84 C 168 84 164 79 164 74 C 164 64 170 64 176 64 Z
+    "/>
+  </g>
+  <g id="wordmark" fill="#ffffff" fill-rule="evenodd">
+    <!-- V -->
+    <path d="M 300 84 L 320.7 84 L 338.0 147.4 L 355.3 84 L 376 84 L 348.8 160 L 327.2 160 Z"/>
+    <!-- I -->
+    <path d="M 410 84 H 428 V 160 H 410 Z"/>
+    <!-- B -->
+    <path d="M 462 84 H 498 C 524 84 524 120.5 496 120.5 C 528 120.5 528 160 498 160 H 462 Z M 480 102 H 494 C 506 102 506 113.3 494 113.3 H 480 Z M 480 127.7 H 496 C 508 127.7 508 142 496 142 H 480 Z"/>
+    <!-- E -->
+    <path d="M 552 84 H 606 V 102 H 570 V 113 H 598 V 131 H 570 V 142 H 606 V 160 H 552 Z"/>
+  </g>
+</svg>

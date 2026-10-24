@@ -1,0 +1,31 @@
+# Local backups and scratch
+/_backup/
+*.bak
+*.precut
+*.preperf
+*.preh264
+
+# Packaged builds
+/dist-zip/
+/dist-installer/
+/build/
+*.zip
+*.zxp
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.sw?
+
+# System Files
+Thumbs.db
+Desktop.ini
+
+# OS generated files
+.DS_Store
+._*

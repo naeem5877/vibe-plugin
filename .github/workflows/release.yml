@@ -1,0 +1,194 @@
+name: Release
+
+# Push a tag like v1.0.0 to build the installers and publish a GitHub release.
+# Run it by hand (Actions > Release > Run workflow) to test the builds without publishing anything.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Checks that must pass before any installer is built.
+  # ---------------------------------------------------------------------------
+  prepare:
+    name: Validate
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.ver.outputs.version }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Read the version and check the tag matches the manifest
+        id: ver
+        run: |
+          MANIFEST=$(grep -oP 'ExtensionBundleVersion="\K[^"]+' CSXS/manifest.xml)
+          echo "manifest=$MANIFEST"
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            TAG="${GITHUB_REF_NAME#v}"
+            echo "tag=$TAG"
+            if [ "$TAG" != "$MANIFEST" ]; then
+              echo "::error::Tag v$TAG does not match CSXS/manifest.xml version $MANIFEST"
+              exit 1
+            fi
+          fi
+          echo "version=$MANIFEST" >> "$GITHUB_OUTPUT"
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Syntax-check the JavaScript
+        run: for f in js/*.js; do node --check "$f"; done
+
+  # ---------------------------------------------------------------------------
+  # Windows installer (Inno Setup) - per-user, no admin prompt.
+  # ---------------------------------------------------------------------------
+  windows:
+    name: Windows installer
+    needs: prepare
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Stage the panel files
+        shell: bash
+        run: bash installer/stage.sh build/stage/com.vibeplugin
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup --no-progress -y
+
+      - name: Build the installer
+        shell: pwsh
+        run: |
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" "/DAppVersion=${{ needs.prepare.outputs.version }}" installer\windows\vibe-plugin.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-windows
+          path: dist-installer/*.exe
+          if-no-files-found: error
+
+  # ---------------------------------------------------------------------------
+  # macOS installer (.pkg) - installs for every user, enables unsigned panels for the one running it.
+  # ---------------------------------------------------------------------------
+  macos:
+    name: macOS installer
+    needs: prepare
+    runs-on: macos-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build the installer
+        run: bash installer/macos/build-pkg.sh "${{ needs.prepare.outputs.version }}"
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-macos
+          path: dist-installer/*.pkg
+          if-no-files-found: error
+
+  # ---------------------------------------------------------------------------
+  # Portable ZIP for manual installs and for anyone who prefers not to run an installer.
+  # ---------------------------------------------------------------------------
+  zip:
+    name: Portable ZIP
+    needs: prepare
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Package the extension
+        run: |
+          bash installer/stage.sh build/stage/com.vibeplugin
+          mkdir -p dist-installer
+          (cd build/stage/com.vibeplugin && zip -qr "../../../dist-installer/vibe-plugin-v${{ needs.prepare.outputs.version }}-portable.zip" .)
+
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-zip
+          path: dist-installer/*.zip
+          if-no-files-found: error
+
+  # ---------------------------------------------------------------------------
+  # Publish the release (tags only).
+  # ---------------------------------------------------------------------------
+  release:
+    name: Publish release
+    needs: [prepare, windows, macos, zip]
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download the installers
+        uses: actions/download-artifact@v4
+        with:
+          pattern: installer-*
+          path: release
+          merge-multiple: true
+
+      - name: Checksums and release text
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          cd release
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+          cd ..
+          cat > release-body.md <<EOF
+          ## Download
+
+          | Platform | File |
+          |---|---|
+          | 🪟 **Windows** (Premiere Pro) | \`vibe-plugin-v${VERSION}-windows-setup.exe\` |
+          | 🍎 **macOS** (Premiere Pro, experimental) | \`vibe-plugin-v${VERSION}-macos.pkg\` |
+          | 📦 **Any OS**, manual install | \`vibe-plugin-v${VERSION}-portable.zip\` |
+
+          Run the installer, **restart Premiere Pro**, then open **Window → Extensions → Vibe Plugin**.
+
+          > The installers are unsigned, so Windows SmartScreen or macOS Gatekeeper may warn you the first time.
+          > On Windows choose **More info → Run anyway**. On macOS right-click the \`.pkg\` and choose **Open**.
+          > Verify a download against \`SHA256SUMS.txt\` if you like.
+
+          ---
+          EOF
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+          body_path: release-body.md
+          generate_release_notes: true
+
+      - name: Notify Discord
+        if: success()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK" ]; then echo "No DISCORD_WEBHOOK secret set, skipping."; exit 0; fi
+          curl -sf -H "Content-Type: application/json" \
+          -d "{
+            \"content\": \"🚀 **New Vibe Plugin Release!**\n\n📦 Version: ${{ github.ref_name }}\n\n⬇️ Download:\nhttps://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}\"
+          }" \
+          "$DISCORD_WEBHOOK"

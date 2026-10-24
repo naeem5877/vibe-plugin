@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vibe Plugin</title>
+<link rel="icon" type="image/svg+xml" href="brand/dist/favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/stock.css">
+<link rel="stylesheet" href="css/playlist.css">
+</head>
+<body>
+<div id="shell">
+
+  <nav id="rail">
+    <div class="logo" data-i="logo" data-s="18" title="Vibe"></div>
+    <button class="nav on" id="nav-search" title="Search" data-i="search" data-s="18"></button>
+    <button class="nav" id="nav-stock" title="Stock library" data-i="image" data-s="18"></button>
+    <button class="nav" id="nav-downloads" title="Downloads" data-i="download" data-s="18"><span id="navbadge" class="nbadge hidden"></span></button>
+    <div class="spacer"></div>
+    <button class="nav" id="nav-settings" title="Settings" data-i="sliders" data-s="18"></button>
+  </nav>
+
+  <div id="content">
+    <header id="top">
+      <div class="crumb"><span>Vibe</span><span data-i="chevron" data-s="12"></span><b id="crumb">Search</b></div>
+      <div id="statuswrap"><span class="spin"></span><span id="status"></span></div>
+    </header>
+
+    <div id="mini" class="hidden">
+      <div class="mt"><span id="mini-t"></span><span class="mgo">View</span></div>
+      <div class="mbar"><div id="mini-f"></div></div>
+    </div>
+
+    <!-- SEARCH -->
+    <section id="view-search" class="view">
+      <div id="searchhead">
+        <div id="hero">
+          <div class="eyebrow" id="eyebrow">SEARCH &amp; IMPORT</div>
+          <h1 id="h1">Search YouTube</h1>
+          <p id="sub">Type anything, or paste a link.</p>
+        </div>
+        <div class="search" id="searchbox">
+          <span class="si" id="sicon"></span>
+          <input id="q" type="text" placeholder="Search YouTube or paste a link" spellcheck="false" autocomplete="off">
+          <button id="qclear" class="xbtn hidden" title="Clear" data-i="x" data-s="14"></button>
+          <button id="go">Search</button>
+        </div>
+        <div id="chipwrap">
+          <button class="arrow l" id="chl" title="Scroll left" data-i="chevl" data-s="14"></button>
+          <div id="chips"></div>
+          <button class="arrow r" id="chr" title="Scroll right" data-i="chevron" data-s="14"></button>
+        </div>
+      </div>
+      <main id="main">
+        <div id="home"></div>
+        <div id="detail" class="hidden"></div>
+      </main>
+    </section>
+
+    <!-- DOWNLOADS -->
+    <section id="view-stock" class="view hidden"><div id="stock-root"></div></section>
+
+    <section id="view-downloads" class="view hidden">
+      <div class="scroll">
+        <div class="eyebrow">ACTIVITY</div>
+        <div class="vhead"><h1>Downloads</h1><a id="clear" href="#">Clear finished</a></div>
+        <div id="queue"></div>
+        <div id="histhead" class="qhead hidden"><span>Earlier</span><a id="histclear" href="#">Clear history</a></div>
+        <div id="history"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="view-settings" class="view hidden">
+      <div class="scroll">
+        <div class="eyebrow">PREFERENCES</div>
+        <h1>Settings</h1>
+        <div id="settings">
+          <div class="set">
+            <div class="sl">Download folder</div>
+            <div class="sd">Where finished files are saved.</div>
+            <div class="row"><input id="dir" type="text" readonly><button id="pick" class="ghost">Browse</button></div>
+          </div>
+          <div class="set">
+            <div class="sl">Login cookies</div>
+            <div class="sd">For Instagram, Facebook and private videos.</div>
+            <select id="cookies">
+              <option value="">None</option>
+              <option value="chrome">From Chrome</option>
+              <option value="edge">From Edge</option>
+              <option value="firefox">From Firefox</option>
+              <option value="brave">From Brave</option>
+            </select>
+          </div>
+          <div class="set inline">
+            <div>
+              <div class="sl">Place on timeline</div>
+              <div class="sd">After import, drop the clip at the playhead.</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="tl"><i></i></label>
+          </div>
+          <div class="set">
+            <div class="sl">Performance</div>
+            <div class="sd" id="perfinfo"></div>
+            <select id="perf">
+              <option value="auto">Auto (recommended)</option>
+              <option value="gentle">Gentle - best for slower PCs</option>
+              <option value="balanced">Balanced</option>
+              <option value="fast">Fast - uses more CPU</option>
+              <option value="max">Maximum - fastest, may slow Premiere</option>
+            </select>
+          </div>
+          <div class="set inline">
+            <div>
+              <div class="sl">Downloader engine</div>
+              <div class="sd">Updates itself daily. Update now if a site stops working.</div>
+            </div>
+            <button id="upd" class="ghost">Update</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="toast"></div>
+  </div>
+</div>
+<script src="js/search.js"></script>
+<script src="js/tracks.js"></script>
+<script src="js/innertube.js"></script>
+<script src="js/tools.js"></script>
+<script src="js/perf.js"></script>
+<script src="js/download.js"></script>
+<script src="js/trim.js"></script>
+<script src="js/brands.js"></script>
+<script src="js/stock.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

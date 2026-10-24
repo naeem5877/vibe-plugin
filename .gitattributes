@@ -1,0 +1,12 @@
+* text=auto
+
+# Shell scripts and the macOS installer script must stay LF or they fail on macOS/Linux.
+*.sh text eol=lf
+installer/macos/scripts/* text eol=lf
+installer/macos/build-pkg.sh text eol=lf
+*.bat text eol=crlf
+
+# Never touch binaries.
+*.png binary
+*.bmp binary
+*.ico binary
